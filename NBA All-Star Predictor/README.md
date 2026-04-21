@@ -6,7 +6,7 @@ Predicting NBA All-Star selection from regular-season per-game statistics using 
 
 ## Live Dashboard
 
-🔗 **[Streamlit App](https://your-app-name.streamlit.app)** *(update with your deployed URL)*
+🔗 **[Streamlit App]([https://your-app-name.streamlit.app](http://localhost:8501/))** *(update with your deployed URL)*
 
 ## Project Overview
 
