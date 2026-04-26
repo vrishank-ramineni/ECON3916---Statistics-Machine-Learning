@@ -1,89 +1,101 @@
-# 📊 Economic Data Science Portfolio
+# NBA All-Star Predictor 🏀
 
-**ECON 3916: Statistical & Machine Learning for Economics**  
-*Bridging Traditional Economic Theory with Modern Data Science*
+Predicting NBA All-Star selection from regular-season per-game statistics using machine learning.
 
----
+**ECON 3916: ML Prediction Project — Spring 2026**
 
-## 👋 About Me
+## Live Dashboard
 
-I'm an undergraduate student double-majoring in **Computer Science** and **Economics**, passionate about leveraging data-driven approaches to solve real-world economic problems. I'm actively seeking opportunities in **Data Analysis**, **Economic Consulting**, and **Finance**, where I can apply both technical programming skills and rigorous economic thinking.
+🔗 **[Streamlit App](https://your-app-name.streamlit.app)** *(update with your deployed URL)*
 
-My goal is to bridge the gap between traditional economic theory and modern data science—combining the causal rigor of econometrics with the predictive power of machine learning and scalable software engineering.
+## Project Overview
 
----
+**Prediction Question:** Can we predict whether an NBA player will be selected as an All-Star based on their regular-season per-game statistics?
 
-## 📚 About This Portfolio
+**Stakeholder:** A sports media company (e.g., ESPN, The Ringer) deciding which borderline players to feature in pre-All-Star coverage and prediction articles.
 
-This repository showcases my coursework, labs, and projects from **ECON 3916: Statistical & Machine Learning for Economics**. The course takes a unique **"Concept Extension"** approach to learning:
+**Key Result:** The Random Forest model achieved the best F1 score (0.704) with 69.1% precision and 71.7% recall on a held-out test set, using 13 per-game statistical features across 10 NBA seasons (2014-15 to 2023-24).
 
-- **Start with Foundations**: Begin with core statistical concepts (e.g., linear regression, hypothesis testing)
-- **Scale with Machine Learning**: Extend these concepts using modern ML algorithms (e.g., Lasso, Ridge, Random Forests)
-- **Bridge Two Worlds**: Learn to navigate between causal inference (answering "why?") and predictive analytics (answering "what will happen?")
+> ⚠️ **Prediction, not causation.** This model predicts All-Star selection from stats — it does not claim that changing any stat causes selection.
 
-Through this portfolio, you'll see my progression in:
-- Implementing classical econometric models and understanding their assumptions
-- Applying regularization techniques to handle high-dimensional data
-- Building predictive models while maintaining economic interpretability
-- Translating economic questions into data science workflows
-
----
-
-## 🛠️ Tech Stack
-
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
-![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![Google Colab](https://img.shields.io/badge/Google_Colab-F9AB00?style=for-the-badge&logo=google-colab&logoColor=white)
-![Statsmodels](https://img.shields.io/badge/Statsmodels-4B8BBE?style=for-the-badge&logo=python&logoColor=white)
-
-**Core Tools:**
-- **Python**: Primary programming language for data analysis and modeling
-- **Pandas**: Data manipulation and analysis
-- **Scikit-Learn**: Machine learning algorithms and model evaluation
-- **Statsmodels**: Statistical modeling and econometric analysis
-- **Google Colab**: Cloud-based development environment
-
----
-
-## 📂 Repository Structure
+## Repository Structure
 
 ```
-📦 ECON3916-Portfolio
-├── 📁 labs/              # Weekly lab assignments
-├── 📁 projects/          # Course projects and case studies
-├── 📁 notes/             # Learning notes and concept summaries
-└── 📄 README.md          # You are here!
+├── app.py                     # Streamlit dashboard
+├── requirements.txt           # Python dependencies (pinned versions)
+├── model_artifacts.pkl        # Trained models, scaler, feature list
+├── nba_allstar_dataset.csv    # Full dataset (10 seasons, 4,255 player-seasons)
+├── current_season_stats.csv   # Most recent season for player lookup
+├── notebooks/
+│   └── analysis.ipynb         # Full analysis pipeline (EDA + modeling)
+├── README.md                  # This file
 ```
 
----
+## Reproducibility
 
-## 🚀 What I'm Learning
+### 1. Clone the repository
 
-- **Causal Inference**: Understanding treatment effects, instrumental variables, and difference-in-differences
-- **Predictive Modeling**: Building robust models for forecasting and classification
-- **Regularization Techniques**: Lasso, Ridge, and Elastic Net for feature selection
-- **Model Evaluation**: Cross-validation, bias-variance tradeoff, and performance metrics
-- **Economic Applications**: Applying ML to labor economics, policy evaluation, and market analysis
+```bash
+git clone https://github.com/YOUR_USERNAME/nba-allstar-predictor.git
+cd nba-allstar-predictor
+```
 
----
+### 2. Set up the environment
 
-## 🌱 Currently Exploring
+```bash
+python -m venv venv
+source venv/bin/activate        # macOS/Linux
+# venv\Scripts\activate         # Windows
+pip install -r requirements.txt
+```
 
-I'm eager to deepen my understanding of:
-- Advanced ensemble methods and boosting algorithms
-- Time series forecasting for economic indicators
-- Natural language processing for economic text data
-- Cloud computing and scalable data pipelines
+### 3. Data acquisition
 
----
+The dataset is sourced from Kaggle: [NBA/ABA/BAA Stats](https://www.kaggle.com/datasets/sumitrodatta/nba-aba-baa-stats). To reproduce from scratch:
 
-## 📫 Let's Connect
+```python
+import kagglehub
+path = kagglehub.dataset_download("sumitrodatta/nba-aba-baa-stats")
+```
 
-I'm always interested in discussing economic research, data science projects, or career opportunities!
+The pre-processed CSVs (`nba_allstar_dataset.csv` and `current_season_stats.csv`) are included in this repo.
 
-- **Email**: ramineni.v@northeastern.edu
+### 4. Run the notebook
 
----
+Open `notebooks/analysis.ipynb` in Google Colab or Jupyter and run all cells. The notebook:
+- Loads and cleans the Kaggle dataset
+- Creates the All-Star label by merging with `All-Star Selections.csv`
+- Runs EDA with 4 visualizations
+- Trains 3 models (Logistic Regression, Random Forest, Gradient Boosting) with 5-fold CV and GridSearchCV
+- Evaluates on a held-out test set with bootstrap confidence intervals
+- Saves model artifacts for the Streamlit app
 
-*This portfolio is a living document of my journey in economic data science. I'm constantly learning and improving—feedback is always welcome!*
+### 5. Launch Streamlit locally
+
+```bash
+streamlit run app.py
+```
+
+The dashboard will open at `http://localhost:8501`.
+
+## Models
+
+| Model | Accuracy | Precision | Recall | F1 | AUC-ROC |
+|-------|----------|-----------|--------|-----|---------|
+| Logistic Regression | 0.946 | 0.539 | 0.906 | 0.676 | 0.984 |
+| **Random Forest** | **0.962** | **0.691** | **0.717** | **0.704** | 0.977 |
+| Gradient Boosting | 0.959 | 0.737 | 0.528 | 0.615 | 0.977 |
+
+All models use `random_state=42` for reproducibility. Class imbalance (~6.3% All-Stars) is addressed via `class_weight='balanced'`.
+
+## Data
+
+- **Source:** [Kaggle — NBA/ABA/BAA Stats](https://www.kaggle.com/datasets/sumitrodatta/nba-aba-baa-stats)
+- **Seasons:** 2014-15 through 2023-24 (10 seasons)
+- **Observations:** 4,255 player-seasons (minimum 20 games played)
+- **Target:** Binary — All-Star (1) or not (0)
+- **Features:** 13 per-game statistics (PTS, AST, TRB, STL, BLK, MP, FG%, 3P%, FT%, TOV, Age, G, GS)
+
+## Tech Stack
+
+Python 3.10+ · pandas · scikit-learn · Streamlit · Plotly · NumPy
